@@ -341,7 +341,7 @@ void creaDatagramFisico(Ethernetv2Header& Frame, int Source[6], int Destination[
     // Inserimento dell'EtherType: 0x0800 (IPv4)
     ConvertiIntBinario(0x0800, Frame.EtherType, 16);
 
-    // Calcolo del CRC-32 (Frame Check Sequence)
+    // Calcolo del CRC-32
     const char polinomioCRC[] = "100000100110000010001110110110111"; // polinomio CRC-32 in binario
 	CRCAlgorythm(Frame.FCS, Frame.Payload, 32, polinomioCRC);
 }
@@ -353,24 +353,24 @@ string creaDatagramStringaFisico(const Ethernetv2Header& Frame) {
     Impacchettato.reserve(7 * 8 + 6 * 8 + 6 * 8 + 16 + Frame.Payload.size() + 32);
     
     // Preambolo: 7 byte (7 x 8 bit)
-    for (int i = 0; i < 7; ++i)
-        for (int j = 0; j < 8; ++j) Impacchettato += Frame.Preamble[i][j];
+    for (int i = 0; i < 7; i++)
+        for (int j = 0; j < 8; j++) Impacchettato += Frame.Preamble[i][j];
     // Destination MAC (Dsap): 6 byte (6 x 8 bit)
-    for (int i = 0; i < 6; ++i)
-        for (int j = 0; j < 8; ++j) Impacchettato += Frame.Dsap[i][j];
+    for (int i = 0; i < 6; i++)
+        for (int j = 0; j < 8; j++) Impacchettato += Frame.Dsap[i][j];
             
     // Source MAC (Ssap): 6 byte (6 x 8 bit)
-    for (int i = 0; i < 6; ++i)
-        for (int j = 0; j < 8; ++j) Impacchettato += Frame.Ssap[i][j];
+    for (int i = 0; i < 6; i++)
+        for (int j = 0; j < 8; j++) Impacchettato += Frame.Ssap[i][j];
 
     // EtherType: 2 byte (16 bit)
-    for (int i = 0; i < 16; ++i) Impacchettato += Frame.EtherType[i];
+    for (int i = 0; i < 16; i++) Impacchettato += Frame.EtherType[i];
 
     // Payload: stringa già binaria
     Impacchettato += Frame.Payload;
 
     // FCS: 4 byte (32 bit)
-    for (int i = 0; i < 32; ++i) Impacchettato += Frame.FCS[i];
+    for (int i = 0; i < 32; i++) Impacchettato += Frame.FCS[i];
 
     return Impacchettato;
 }
